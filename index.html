@@ -241,6 +241,52 @@
       color: var(--muted);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
+  
+    /* Theme system (Auto/Light/Dark)
+       - Default uses :root values (light)
+       - Auto dark follows OS setting via prefers-color-scheme
+       - Manual override uses <html data-theme="light|dark"> */
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg: #0b0c10;
+        --panel: #11131a;
+        --ink: #e9ecf1;
+        --muted: #aab2c0;
+        --line: rgba(233,236,241,.12);
+        --accent: #c56b6b;
+        --accent2:#e28f8f;
+        --chip: rgba(197,107,107,.14);
+        --shadow: 0 18px 60px rgba(0,0,0,.45);
+      }
+      .input, select{ background: rgba(255,255,255,.04); }
+      .pill{ background: rgba(255,255,255,.04); }
+      button{ background: rgba(255,255,255,.03); }
+      button.primary{ background: rgba(197,107,107,.14); }
+    }
+
+    html[data-theme="light"]{
+      --bg: #f4f0ea;
+      --panel: #ffffff;
+      --ink: #2c2a28;
+      --muted: #6f6a64;
+      --line: rgba(44,42,40,.12);
+      --accent: #9a4b4b;
+      --accent2:#7f3b3b;
+      --chip: rgba(154,75,75,.08);
+      --shadow: 0 12px 40px rgba(25, 20, 16, .10);
+    }
+    html[data-theme="dark"]{
+      --bg: #0b0c10;
+      --panel: #11131a;
+      --ink: #e9ecf1;
+      --muted: #aab2c0;
+      --line: rgba(233,236,241,.12);
+      --accent: #c56b6b;
+      --accent2:#e28f8f;
+      --chip: rgba(197,107,107,.14);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+    }
+
   </style>
 </head>
 <body>
@@ -258,8 +304,18 @@
         <div class="pill"><span class="kbd">Space</span> flip</div>
         <div class="pill"><span class="kbd">←/→</span> forrige/neste</div>
         <div class="pill"><span class="kbd">1/2/3</span> igjen/god/enkel</div>
+      
+        <div class="pill" style="display:flex; gap:8px; align-items:center;">
+          <span style="color:var(--muted);">Tema</span>
+          <select id="themeToggle" style="min-width: 140px; padding:7px 10px; border-radius:999px;">
+            <option value="auto">Auto</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+
       </div>
-    </header>
+    </header
 
     <div class="grid">
       <div class="panel">
@@ -410,6 +466,30 @@
     const statDueEl = el("statDue");
     const statBoxesEl = el("statBoxes");
     const statRatedEl = el("statRated");
+
+
+    // Theme toggle: Auto/Light/Dark (stored in localStorage)
+    const themeToggleEl = document.getElementById("themeToggle");
+    const THEME_KEY = "lv_theme_pref";
+
+    function applyTheme(pref){
+      if(!pref || pref === "auto"){
+        document.documentElement.removeAttribute("data-theme");
+        themeToggleEl.value = "auto";
+        localStorage.setItem(THEME_KEY, "auto");
+        return;
+      }
+      document.documentElement.setAttribute("data-theme", pref);
+      themeToggleEl.value = pref;
+      localStorage.setItem(THEME_KEY, pref);
+    }
+
+    // init theme
+    const savedTheme = localStorage.getItem(THEME_KEY) || "auto";
+    applyTheme(savedTheme);
+
+    themeToggleEl.addEventListener("change", (e) => applyTheme(e.target.value));
+
 
     // --- STORE ---
     function loadStore(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch(e){ return {}; } }
