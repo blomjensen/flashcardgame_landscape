@@ -3,442 +3,363 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Landscape Vocabulary</title>
+  <title>Landscape Flashcards</title>
   <style>
     :root{
-      --bg: #f4f0ea;          /* warm off-white */
-      --panel: #ffffff;
-      --ink: #2c2a28;         /* near-black */
-      --muted: #6f6a64;
-      --line: rgba(44,42,40,.12);
-      --accent: #9a4b4b;      /* muted red like screenshot */
-      --accent2:#7f3b3b;
-      --chip: rgba(154,75,75,.08);
-      --shadow: 0 12px 40px rgba(25, 20, 16, .10);
+      /* Bornflight-ish dark editorial */
+      --bg:#070b0f;
+      --frame:#0b1016;
+      --card:#132a36;            /* deep blue-green */
+      --card2:#0f2330;
+      --ink:#f3f6f8;
+      --muted: rgba(243,246,248,.72);
+      --muted2: rgba(243,246,248,.55);
+      --line: rgba(243,246,248,.10);
+      --accent:#90d3ff;          /* cyan label */
+      --accent2:#6bbfe8;
+      --shadow: 0 24px 80px rgba(0,0,0,.55);
       --radius: 18px;
-      --radius2: 14px;
+      --radius2: 12px;
     }
 
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: var(--bg);
+      background: radial-gradient(1200px 900px at 20% 10%, rgba(144,211,255,.08), transparent 55%),
+                  radial-gradient(900px 700px at 90% 20%, rgba(144,211,255,.05), transparent 60%),
+                  var(--bg);
       color: var(--ink);
     }
 
-    .wrap{max-width:1060px; margin:0 auto; padding:28px 18px 48px;}
-    header{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; padding:0 2px 18px;}
-    .brand{display:flex; flex-direction:column; gap:10px;}
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 18px 42px;
+    }
+
+    header{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+      margin-bottom: 16px;
+    }
     .brand h1{
       margin:0;
-      font-weight:650;
-      letter-spacing:.2px;
-      font-size:24px;
-      color: var(--ink);
+      font-size: 22px;
+      font-weight: 650;
+      letter-spacing: .2px;
     }
     .brand .sub{
-      margin:0;
-      color: var(--muted);
-      font-size:13px;
-      line-height:1.45;
-      max-width: 680px;
-    }
-    .metaPills{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
-    .pill{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.55);
-      padding:8px 10px;
-      border-radius:999px;
-      font-size:12px;
-      color: var(--muted);
+      margin-top:8px;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap:16px;
+    .topControls{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
     }
-    @media (max-width: 920px){
-      header{flex-direction:column; align-items:flex-start}
-      .metaPills{justify-content:flex-start}
-      .grid{grid-template-columns:1fr}
-    }
-
-    .panel{
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panel .hd{
-      padding:14px 16px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .panel .hd strong{font-size:13px; font-weight:650; letter-spacing:.2px; color: var(--muted); text-transform:uppercase}
-    .panel .bd{padding:16px}
-
-    .controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
     .input, select{
-      border:1px solid var(--line);
-      background: rgba(244,240,234,.25);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
       color: var(--ink);
-      padding:10px 12px;
+      padding: 10px 12px;
       border-radius: 999px;
       outline:none;
-      min-width: 210px;
-      font-size:13px;
+      font-size: 13px;
+      min-width: 190px;
     }
-    select{min-width: 200px}
-    .input::placeholder{color: rgba(44,42,40,.42)}
+    .input::placeholder{ color: rgba(243,246,248,.45); }
+
+    .frame{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
 
     .card{
-      border:1px solid var(--line);
-      border-radius: 22px;
-      padding:18px;
-      min-height: 380px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap:14px;
-      background:
-        radial-gradient(900px 400px at 20% -20%, rgba(154,75,75,.08), transparent 55%),
-        radial-gradient(800px 420px at 120% 20%, rgba(154,75,75,.06), transparent 55%),
-        #fff;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      overflow:hidden;
     }
 
-    .topmeta{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center}
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background: var(--chip);
-      border:1px solid rgba(154,75,75,.18);
-      color: var(--accent2);
-      font-size:12px;
-    }
-    .chip.secondary{
-      background: rgba(255,255,255,.65);
-      border: 1px solid var(--line);
-      color: var(--muted);
+    .cardInner{
+      background: linear-gradient(180deg, rgba(19,42,54,.96), rgba(15,35,48,.96));
+      border-radius: 18px;
+      padding: 26px 26px 22px;
+      min-height: 420px;
     }
 
-    .promptTitle{
-      margin-top:6px;
-      color: var(--muted);
-      font-size:12px;
-      letter-spacing:.2px;
-      text-transform:uppercase;
+    .metaRow{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      margin-bottom: 14px;
     }
-    .promptMain{
-      margin:8px 0 0;
-      font-size:42px;
-      line-height:1.04;
-      letter-spacing:-.4px;
-      font-weight:650;
-      color: var(--accent);
+
+    .tag{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(144,211,255,.18);
+      border: 1px solid rgba(144,211,255,.35);
+      color: rgba(240,250,255,.92);
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .counter{
+      color: rgba(243,246,248,.62);
+      font-size: 12px;
+      letter-spacing:.08em;
+    }
+
+    .title{
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.02;
+      font-size: 58px;
+      margin: 8px 0 8px;
       word-break: break-word;
     }
-    @media (max-width: 520px){
-      .promptMain{font-size:34px}
-      .input, select{min-width: 180px}
+    @media (max-width: 680px){
+      .title{ font-size: 40px; }
+      .cardInner{ padding: 18px 16px 16px; }
+      .input, select{ min-width: 160px; }
     }
 
-    .promptSub{
-      margin-top:12px;
-      color: var(--ink);
-      font-size:15px;
-      line-height:1.5;
-      display:none;
+    .ipa{
+      color: rgba(144,211,255,.9);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .noTerm{
+      margin-top: 6px;
+      color: rgba(243,246,248,.70);
+      font-style: italic;
+      font-size: 20px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+
+    .quote{
+      margin-top: 18px;
+      padding-left: 16px;
+      border-left: 3px solid rgba(144,211,255,.55);
+      color: rgba(243,246,248,.88);
+      font-size: 20px;
+      line-height: 1.45;
+      max-width: 820px;
     }
 
     .hint{
-      color: var(--muted);
-      font-size:13px;
-      line-height:1.4;
-      margin-top:10px;
+      margin-top: 16px;
+      color: rgba(243,246,248,.50);
+      font-size: 13px;
+      letter-spacing:.06em;
+    }
+    .kbd{
+      padding: 2px 7px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.25);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 12px;
+      color: rgba(243,246,248,.70);
     }
 
     .answer{
-      margin-top:14px;
-      padding-top:14px;
-      border-top: 1px solid rgba(44,42,40,.10);
+      margin-top: 18px;
       display:none;
     }
-    .answer.show{display:block}
+    .answer.show{ display:block; }
 
-    .kv{margin:10px 0; font-size:14px; line-height:1.45}
-    .kv .k{color: var(--muted); font-size:12px; margin-bottom:4px; text-transform:uppercase; letter-spacing:.2px}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; color: var(--ink)}
+    .kv{ margin: 12px 0; }
+    .k{
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: 11px;
+      color: rgba(243,246,248,.48);
+      margin-bottom: 6px;
+    }
+    .v{
+      color: rgba(243,246,248,.92);
+      font-size: 15px;
+      line-height: 1.5;
+    }
 
-    .btnrow{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    button{
-      border:1px solid var(--line);
-      background: #fff;
-      color: var(--ink);
-      padding:10px 14px;
-      border-radius: 999px;
+    .btnWide{
+      width:100%;
+      margin-top: 18px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(243,246,248,.82);
+      padding: 14px 14px;
+      border-radius: 10px;
       cursor:pointer;
-      font-weight:600;
-      font-size:13px;
-      transition: transform .05s ease, border-color .12s ease, background .12s ease;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-weight: 650;
+      font-size: 12px;
     }
-    button:hover{border-color: rgba(154,75,75,.35)}
-    button:active{transform: translateY(1px)}
+    .btnWide:hover{ border-color: rgba(144,211,255,.35); }
 
-    button.primary{
-      border-color: rgba(154,75,75,.35);
-      background: rgba(154,75,75,.10);
-      color: var(--accent2);
+    .navRow{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap: 18px;
+      margin-top: 18px;
+      color: rgba(243,246,248,.60);
     }
+    .navBtn{
+      width: 54px; height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: rgba(243,246,248,.80);
+      cursor:pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .navBtn:hover{ border-color: rgba(144,211,255,.30); }
 
-    .rating{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    .dots{
+      display:flex; flex-wrap:wrap; justify-content:center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 0 10px;
     }
-    .rating .label{color: var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.2px; margin-right:2px}
-    button.soft{
-      background: rgba(244,240,234,.40);
+    .dot{
+      width: 7px; height: 7px;
+      border-radius: 999px;
+      background: rgba(243,246,248,.18);
     }
-    button.good{border-color: rgba(68, 140, 98, .30)}
-    button.again{border-color: rgba(164, 74, 74, .30)}
-    button.easy{border-color: rgba(77, 122, 184, .30)}
+    .dot.active{ background: rgba(144,211,255,.75); }
+
+    .srRow{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top: 14px;
+    }
+    .srBtn{
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      color: rgba(243,246,248,.86);
+      cursor:pointer;
+      font-weight: 650;
+      letter-spacing: .02em;
+      font-size: 13px;
+      min-width: 110px;
+    }
+    .srBtn:hover{ border-color: rgba(144,211,255,.28); }
+    .srBtn.again{ border-color: rgba(255,120,120,.25); }
+    .srBtn.good{  border-color: rgba(255,210,120,.22); }
+    .srBtn.easy{  border-color: rgba(144,211,255,.25); }
 
     .err{
-      padding:12px 14px;
-      border-radius: var(--radius2);
-      background: rgba(154,75,75,.10);
-      border:1px solid rgba(154,75,75,.25);
-      color: var(--ink);
-      font-size:13px;
-      line-height:1.4;
-      margin-bottom:12px;
+      background: rgba(255,120,120,.10);
+      border: 1px solid rgba(255,120,120,.24);
+      color: rgba(243,246,248,.92);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      line-height: 1.4;
     }
 
-    .list{display:flex; flex-direction:column; gap:10px;}
-    .stat{
-      display:flex; justify-content:space-between; gap:10px;
-      padding:12px 14px; border-radius: var(--radius2);
-      background: rgba(244,240,234,.35);
-      border:1px solid var(--line);
-      color: var(--muted);
-      font-size:13px;
+    footerNote{
+      display:block;
+      margin-top: 14px;
+      color: rgba(243,246,248,.45);
+      font-size: 12px;
+      text-align:center;
     }
-    .stat b{color: var(--ink)}
-    .small{color: var(--muted); font-size:12px; line-height:1.5}
-
-    .kbd{
-      padding:2px 7px;
-      border-radius:8px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.75);
-      font-size:12px;
-      color: var(--muted);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
-  
-    /* Theme system (Auto/Light/Dark)
-       - Default uses :root values (light)
-       - Auto dark follows OS setting via prefers-color-scheme
-       - Manual override uses <html data-theme="light|dark"> */
-    @media (prefers-color-scheme: dark) {
-      :root{
-        --bg: #0b0c10;
-        --panel: #11131a;
-        --ink: #e9ecf1;
-        --muted: #aab2c0;
-        --line: rgba(233,236,241,.12);
-        --accent: #c56b6b;
-        --accent2:#e28f8f;
-        --chip: rgba(197,107,107,.14);
-        --shadow: 0 18px 60px rgba(0,0,0,.45);
-      }
-      .input, select{ background: rgba(255,255,255,.04); }
-      .pill{ background: rgba(255,255,255,.04); }
-      button{ background: rgba(255,255,255,.03); }
-      button.primary{ background: rgba(197,107,107,.14); }
-    }
-
-    html[data-theme="light"]{
-      --bg: #f4f0ea;
-      --panel: #ffffff;
-      --ink: #2c2a28;
-      --muted: #6f6a64;
-      --line: rgba(44,42,40,.12);
-      --accent: #9a4b4b;
-      --accent2:#7f3b3b;
-      --chip: rgba(154,75,75,.08);
-      --shadow: 0 12px 40px rgba(25, 20, 16, .10);
-    }
-    html[data-theme="dark"]{
-      --bg: #0b0c10;
-      --panel: #11131a;
-      --ink: #e9ecf1;
-      --muted: #aab2c0;
-      --line: rgba(233,236,241,.12);
-      --accent: #c56b6b;
-      --accent2:#e28f8f;
-      --chip: rgba(197,107,107,.14);
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-    }
-
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Landscape Vocabulary</h1>
-        <p class="sub">
-          Clean, academic flashcards for landscape architecture (AHO-friendly Norwegian).
-          <br>
-          Data: <span class="mono">landscape_vocabulary_notion.csv</span> + optional <span class="mono">landscape_vocabulary_big.csv</span> in repo root.
-        </p>
+        <h1>Landscape Flashcards</h1>
+        <div class="sub">Bornflight‑style cards + the exact flashcard logic we built (mode + dataset + spaced repetition).</div>
       </div>
-      <div class="metaPills">
-        <div class="pill"><span class="kbd">Space</span> flip</div>
-        <div class="pill"><span class="kbd">←/→</span> forrige/neste</div>
-        <div class="pill"><span class="kbd">1/2/3</span> igjen/god/enkel</div>
-      
-        <div class="pill" style="display:flex; gap:8px; align-items:center;">
-          <span style="color:var(--muted);">Tema</span>
-          <select id="themeToggle" style="min-width: 140px; padding:7px 10px; border-radius:999px;">
-            <option value="auto">Auto</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
-
+      <div class="topControls">
+        <input id="search" class="input" placeholder="Search (EN/NO/defs)..." />
+        <select id="category"></select>
+        <select id="mode"></select>
+        <select id="dataset"></select>
       </div>
-    </header
+    </header>
 
-    <div class="grid">
-      <div class="panel">
-        <div class="hd">
-          <strong>Økt</strong>
-          <div class="controls">
-            <input id="search" class="input" placeholder="Søk (engelsk / norsk / definisjon)…" />
-            <select id="category"></select>
-            <select id="mode"></select>
-            <select id="dataset"></select>
+    <div class="frame">
+      <div id="error" class="err" style="display:none;"></div>
+
+      <div class="card">
+        <div class="cardInner">
+          <div class="metaRow">
+            <div class="tag" id="tag">—</div>
+            <div class="counter" id="counter">—</div>
           </div>
-        </div>
-        <div class="bd">
-          <div id="error" class="err" style="display:none;"></div>
 
-          <div class="card">
-            <div>
-              <div class="topmeta">
-                <div class="chip" id="metaLeft">—</div>
-                <div class="chip secondary" id="metaRight">—</div>
-              </div>
+          <div class="title" id="promptMain">—</div>
+          <div class="ipa" id="ipaLine" style="display:none;">—</div>
+          <div class="noTerm" id="noLine" style="display:none;">—</div>
 
-              <div class="promptTitle" id="promptTitle">—</div>
-              <div class="promptMain" id="promptMain">—</div>
-              <div class="promptSub" id="promptSub"></div>
+          <div class="quote" id="quoteLine" style="display:none;">—</div>
 
-              <div class="hint" id="hint">Trykk <span class="kbd">Space</span> for å vise svar.</div>
+          <div class="hint" id="hint">Press <span class="kbd">Space</span> to flip.</div>
 
-              <div class="answer" id="answer">
-                <div class="kv">
-                  <div class="k">Begrep (EN)</div>
-                  <div id="ans_en">—</div>
-                </div>
-                <div class="kv">
-                  <div class="k">Norsk oversettelse</div>
-                  <div id="ans_no">—</div>
-                </div>
-                <div class="kv">
-                  <div class="k">Definisjon (EN)</div>
-                  <div id="ans_def">—</div>
-                </div>
-                <div class="kv">
-                  <div class="k">Norsk definisjon</div>
-                  <div id="ans_nodef">—</div>
-                </div>
-                <div class="kv">
-                  <div class="k">IPA</div>
-                  <div id="ans_ipa" class="mono">—</div>
-                </div>
-                <div class="kv">
-                  <div class="k">Eksempel</div>
-                  <div id="ans_ex">—</div>
-                </div>
-              </div>
-            </div>
+          <div class="answer" id="answer">
+            <div class="kv"><div class="k">English term</div><div class="v" id="ans_en">—</div></div>
+            <div class="kv"><div class="k">Norsk oversettelse</div><div class="v" id="ans_no">—</div></div>
+            <div class="kv"><div class="k">Norsk definisjon</div><div class="v" id="ans_nodef">—</div></div>
+            <div class="kv"><div class="k">Definition (EN)</div><div class="v" id="ans_def">—</div></div>
 
-            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-end;">
-              <div class="btnrow">
-                <button id="flip" class="primary">Vis svar</button>
-                <button id="prev">Forrige</button>
-                <button id="next">Neste</button>
-                <button id="shuffle">Shuffle</button>
-              </div>
-
-              <div class="rating">
-                <span class="label">Repetisjon</span>
-                <button id="again" class="soft again">1 · Igjen</button>
-                <button id="good"  class="soft good">2 · God</button>
-                <button id="easy"  class="soft easy">3 · Enkel</button>
-              </div>
+            <button class="btnWide" id="toggleExample">↓ SHOW EXAMPLE SENTENCE</button>
+            <div class="kv" id="exampleBlock" style="display:none;">
+              <div class="k">Example sentence</div>
+              <div class="v" id="ans_ex">—</div>
             </div>
           </div>
-
-          <div class="small" style="margin-top:12px;">
-            Hvis Notion embed “henger”: åpne URL i nettleser først, hard refresh (<span class="kbd">Cmd</span>+<span class="kbd">Shift</span>+<span class="kbd">R</span>), og legg inn embed på nytt.
-          </div>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="hd">
-          <strong>Status</strong>
-          <div class="btnrow">
-            <button id="reset">Nullstill</button>
-          </div>
-        </div>
-        <div class="bd">
-          <div class="list">
-            <div class="stat"><span>Totalt (filter)</span><b id="statTotal">—</b></div>
-            <div class="stat"><span>Due nå</span><b id="statDue">—</b></div>
-            <div class="stat"><span>Box 1–5</span><b id="statBoxes">—</b></div>
-            <div class="stat"><span>Vurdert i økt</span><b id="statRated">—</b></div>
-          </div>
-
-          <div class="small" style="margin-top:14px;">
-            <b>AHO/akademisk norsk:</b> Jeg har lagt opp til “praktisk akademisk” språk: norske fagord der de er etablerte,
-            ellers lånord (engelsk) uten rare direkteoversettelser. Det er normalt i norsk praksis og i AHO-tekster.
-          </div>
-        </div>
+      <div class="navRow">
+        <button class="navBtn" id="prev" aria-label="Previous">←</button>
+        <div id="navCount">1 / 1</div>
+        <button class="navBtn" id="next" aria-label="Next">→</button>
       </div>
+
+      <div class="dots" id="dots"></div>
+
+      <div class="srRow">
+        <button class="srBtn again" id="again">1 · Again</button>
+        <button class="srBtn good"  id="good">2 · Good</button>
+        <button class="srBtn easy"  id="easy">3 · Easy</button>
+        <button class="srBtn" id="shuffle">Shuffle</button>
+      </div>
+
+      <footerNote>Tip: If Notion embed caches, open the GitHub Pages URL first and hard refresh.</footerNote>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
-    // --- CONFIG ---
     let CSV_FILE = "landscape_vocabulary_notion.csv";
-    const LS_KEY = "landscape_flashcards_clean_v1";
+    const LS_KEY = "landscape_flashcards_born_v1";
 
-    const DELAYS = {
-      again: 10 * 60 * 1000,
-      goodBase: 24 * 60 * 60 * 1000,
-      easyBase: 3 * 24 * 60 * 60 * 1000
-    };
+    const DELAYS = { again: 10*60*1000, goodBase: 24*60*60*1000, easyBase: 3*24*60*60*1000 };
 
-    // --- STATE ---
     let cards = [];
     let filtered = [];
     let idx = 0;
     let showAnswer = false;
+    let exampleOpen = false;
     let ratedThisSession = 0;
 
-    // --- UI ---
     const el = (id)=>document.getElementById(id);
     const searchEl = el("search");
     const catEl = el("category");
@@ -446,153 +367,141 @@
     const datasetEl = el("dataset");
     const errorEl = el("error");
 
-    const metaLeftEl = el("metaLeft");
-    const metaRightEl = el("metaRight");
+    const tagEl = el("tag");
+    const counterEl = el("counter");
+    const navCountEl = el("navCount");
 
-    const promptTitleEl = el("promptTitle");
-    const promptMainEl  = el("promptMain");
-    const promptSubEl   = el("promptSub");
-    const hintEl        = el("hint");
-    const answerEl      = el("answer");
+    const promptMainEl = el("promptMain");
+    const ipaLineEl = el("ipaLine");
+    const noLineEl = el("noLine");
+    const quoteLineEl = el("quoteLine");
+    const hintEl = el("hint");
 
-    const ansEnEl    = el("ans_en");
-    const ansNoEl    = el("ans_no");
-    const ansDefEl   = el("ans_def");
+    const answerEl = el("answer");
+    const ansEnEl = el("ans_en");
+    const ansNoEl = el("ans_no");
     const ansNoDefEl = el("ans_nodef");
-    const ansIpaEl   = el("ans_ipa");
-    const ansExEl    = el("ans_ex");
+    const ansDefEl = el("ans_def");
+    const ansExEl = el("ans_ex");
 
-    const statTotalEl = el("statTotal");
-    const statDueEl = el("statDue");
-    const statBoxesEl = el("statBoxes");
-    const statRatedEl = el("statRated");
-
-
-    // Theme toggle: Auto/Light/Dark (stored in localStorage)
-    const themeToggleEl = document.getElementById("themeToggle");
-    const THEME_KEY = "lv_theme_pref";
-
-    function applyTheme(pref){
-      if(!pref || pref === "auto"){
-        document.documentElement.removeAttribute("data-theme");
-        themeToggleEl.value = "auto";
-        localStorage.setItem(THEME_KEY, "auto");
-        return;
-      }
-      document.documentElement.setAttribute("data-theme", pref);
-      themeToggleEl.value = pref;
-      localStorage.setItem(THEME_KEY, pref);
-    }
-
-    // init theme
-    const savedTheme = localStorage.getItem(THEME_KEY) || "auto";
-    applyTheme(savedTheme);
-
-    themeToggleEl.addEventListener("change", (e) => applyTheme(e.target.value));
-
-
-    // --- STORE ---
-    function loadStore(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch(e){ return {}; } }
-    function saveStore(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
-    function now(){ return Date.now(); }
-    function normalize(s){ return (s ?? "").toString().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, ""); }
-    function cardId(c){ return normalize(c.en) + "||" + normalize(c.no); }
-    function ensureMeta(store, c){
-      const id = cardId(c);
-      if(!store[id]) store[id] = { box: 1, due: 0 };
-      return store[id];
-    }
+    const toggleExampleBtn = el("toggleExample");
+    const exampleBlock = el("exampleBlock");
+    const dotsEl = el("dots");
 
     function setError(msg){
       errorEl.style.display = msg ? "block" : "none";
       errorEl.textContent = msg || "";
     }
-
+    function now(){ return Date.now(); }
+    function normalize(s){ return (s ?? "").toString().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, ""); }
+    function cardId(c){ return normalize(c.en) + "||" + normalize(c.no); }
+    function loadStore(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch(e){ return {}; } }
+    function saveStore(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+    function ensureMeta(store, c){
+      const id = cardId(c);
+      if(!store[id]) store[id] = { box:1, due:0 };
+      return store[id];
+    }
     function currentCard(){ return filtered.length ? filtered[idx] : null; }
 
-    function computeStats(){
-      const store = loadStore();
-      let due = 0;
-      const boxCounts = [0,0,0,0,0];
-      for(const c of filtered){
-        const m = ensureMeta(store, c);
-        if((m.due || 0) <= now()) due++;
-        const b = Math.min(5, Math.max(1, m.box || 1));
-        boxCounts[b-1]++;
+    function buildDots(){
+      // show up to 60 dots around the current position (for large sets)
+      const n = filtered.length;
+      dotsEl.innerHTML = "";
+      if(!n) return;
+
+      const maxDots = 60;
+      if(n <= maxDots){
+        for(let i=0;i<n;i++){
+          const d = document.createElement("div");
+          d.className = "dot" + (i===idx ? " active":"");
+          dotsEl.appendChild(d);
+        }
+        return;
       }
-      statTotalEl.textContent = String(filtered.length);
-      statDueEl.textContent = String(due);
-      statBoxesEl.textContent = boxCounts.join(" · ");
-      statRatedEl.textContent = String(ratedThisSession);
+      // windowed dots
+      const half = Math.floor(maxDots/2);
+      let start = Math.max(0, idx-half);
+      let end = Math.min(n, start+maxDots);
+      start = Math.max(0, end-maxDots);
+
+      for(let i=start;i<end;i++){
+        const d = document.createElement("div");
+        d.className = "dot" + (i===idx ? " active":"");
+        dotsEl.appendChild(d);
+      }
     }
 
     function renderPromptByMode(c){
-      const mode = (modeEl && modeEl.value) ? modeEl.value : "def2term";
+      const mode = modeEl.value || "term2def";
 
-      // Always update answer fields
+      // Answer (always prepared)
       ansEnEl.textContent = c.en || "—";
       ansNoEl.textContent = c.no || "—";
-      ansDefEl.textContent = c.def || "—";
       ansNoDefEl.textContent = c.nodef || "—";
-      ansIpaEl.textContent = c.ipa || "—";
+      ansDefEl.textContent = c.def || "—";
       ansExEl.textContent = c.ex || "—";
 
-      // Front prompt
-      if(mode === "def2term"){
-        promptTitleEl.textContent = "Definisjon (EN)";
-        promptMainEl.textContent = c.def || "—";
-        if(c.nodef){
-          promptSubEl.style.display = "block";
-          promptSubEl.innerHTML = `<span style="color:var(--muted)">Norsk:</span> ${c.nodef}`;
-        } else {
-          promptSubEl.style.display = "none";
-          promptSubEl.textContent = "";
-        }
-      } else if(mode === "term2def"){
-        promptTitleEl.textContent = "Begrep (EN)";
+      // Reset example section
+      exampleOpen = false;
+      exampleBlock.style.display = "none";
+      toggleExampleBtn.textContent = "↓ SHOW EXAMPLE SENTENCE";
+
+      // Front (Bornflight layout)
+      // We show:
+      // - Title = prompt
+      // - Optional IPA + Norsk (only when the prompt is a term)
+      // - Optional quote line = definition when prompt is a term
+      ipaLineEl.style.display = "none";
+      noLineEl.style.display = "none";
+      quoteLineEl.style.display = "none";
+
+      if(mode === "term2def"){
         promptMainEl.textContent = c.en || "—";
-        promptSubEl.style.display = "none";
-        promptSubEl.textContent = "";
+        if(c.ipa){ ipaLineEl.style.display="block"; ipaLineEl.textContent = c.ipa; }
+        if(c.no){ noLineEl.style.display="block"; noLineEl.textContent = c.no; }
+        if(c.def){ quoteLineEl.style.display="block"; quoteLineEl.textContent = c.def; }
       } else if(mode === "no2en"){
-        promptTitleEl.textContent = "Norsk oversettelse";
         promptMainEl.textContent = c.no || "—";
-        promptSubEl.style.display = "none";
-        promptSubEl.textContent = "";
-      } else {
-        promptTitleEl.textContent = "Prompt";
-        promptMainEl.textContent = c.en || "—";
-        promptSubEl.style.display = "none";
+        if(c.en){ quoteLineEl.style.display="block"; quoteLineEl.textContent = c.en; }
+      } else { // def2term
+        promptMainEl.textContent = c.def || "—";
+        if(c.nodef){ quoteLineEl.style.display="block"; quoteLineEl.textContent = c.nodef; }
       }
     }
 
     function render(){
       const c = currentCard();
       if(!c){
-        metaLeftEl.textContent = "—";
-        metaRightEl.textContent = "—";
-        promptTitleEl.textContent = "—";
-        promptMainEl.textContent = "Ingen kort i filteret.";
-        promptSubEl.style.display = "none";
+        tagEl.textContent = "—";
+        counterEl.textContent = "—";
+        navCountEl.textContent = "0 / 0";
+        promptMainEl.textContent = "No cards in filter.";
+        ipaLineEl.style.display="none";
+        noLineEl.style.display="none";
+        quoteLineEl.style.display="none";
         answerEl.classList.remove("show");
-        computeStats();
+        dotsEl.innerHTML="";
         return;
       }
 
       const store = loadStore();
-      const m = ensureMeta(store, c);
+      const meta = ensureMeta(store, c);
       saveStore(store);
 
-      metaLeftEl.textContent = c.category ? `Kategori: ${c.category}` : "Kategori: —";
-      metaRightEl.textContent = `Kort ${idx+1}/${filtered.length} · Box ${m.box}`;
+      tagEl.textContent = (c.category || "—").toUpperCase();
+      counterEl.textContent = `Box ${meta.box}`;
+      navCountEl.textContent = `${idx+1} / ${filtered.length}`;
+      counterEl.textContent = `Card ${idx+1}/${filtered.length} · Box ${meta.box}`;
 
       renderPromptByMode(c);
 
       answerEl.classList.toggle("show", showAnswer);
       hintEl.innerHTML = showAnswer
-        ? `Vurder kortet med <span class="kbd">1</span>/<span class="kbd">2</span>/<span class="kbd">3</span> (eller klikk).`
-        : `Trykk <span class="kbd">Space</span> for å vise svar.`;
+        ? `Rate: <span class="kbd">1</span>/<span class="kbd">2</span>/<span class="kbd">3</span> — or press <span class="kbd">Space</span> to hide.`
+        : `Press <span class="kbd">Space</span> to flip.`;
 
-      computeStats();
+      buildDots();
     }
 
     function applyFilter(){
@@ -628,26 +537,20 @@
       const id = cardId(c);
       const m = ensureMeta(store, c);
 
-      if(kind === "again"){ m.box = 1; m.due = now() + DELAYS.again; }
-      else if(kind === "good"){ m.box = Math.min(5, (m.box||1)+1); m.due = now() + (DELAYS.goodBase * m.box); }
-      else if(kind === "easy"){ m.box = Math.min(5, (m.box||1)+2); m.due = now() + (DELAYS.easyBase * m.box); }
+      if(kind === "again"){ m.box=1; m.due = now()+DELAYS.again; }
+      else if(kind === "good"){ m.box = Math.min(5,(m.box||1)+1); m.due = now() + (DELAYS.goodBase*m.box); }
+      else if(kind === "easy"){ m.box = Math.min(5,(m.box||1)+2); m.due = now() + (DELAYS.easyBase*m.box); }
 
-      store[id] = m; saveStore(store);
-      ratedThisSession++; nextCard();
-    }
-
-    function resetProgress(){
-      if(!confirm("Nullstill progresjon?")) return;
-      localStorage.removeItem(LS_KEY);
-      ratedThisSession = 0;
-      idx=0; showAnswer=false; render();
+      store[id]=m; saveStore(store);
+      ratedThisSession++;
+      nextCard();
     }
 
     function buildCategoryOptions(){
       const cats = Array.from(new Set(cards.map(c => c.category).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
       catEl.innerHTML="";
       const all = document.createElement("option");
-      all.value="__ALL__"; all.textContent="Alle kategorier";
+      all.value="__ALL__"; all.textContent="All categories";
       catEl.appendChild(all);
       for(const c of cats){
         const o=document.createElement("option");
@@ -659,9 +562,9 @@
 
     function buildModeOptions(){
       const modes = [
-        { v: "def2term", t: "Mode: Definisjon → Begrep" },
-        { v: "term2def", t: "Mode: Begrep → Definisjon" },
-        { v: "no2en",    t: "Mode: Norsk → Engelsk" },
+        { v:"term2def", t:"Mode: Term → Definition" },
+        { v:"def2term", t:"Mode: Definition → Term" },
+        { v:"no2en",    t:"Mode: Norsk → English" },
       ];
       modeEl.innerHTML="";
       for(const m of modes){
@@ -669,13 +572,13 @@
         o.value=m.v; o.textContent=m.t;
         modeEl.appendChild(o);
       }
-      modeEl.value="def2term";
+      modeEl.value="term2def"; // best match to the style you like
     }
 
     function buildDatasetOptions(){
       const sets = [
-        { v: "landscape_vocabulary_notion.csv", t: "Liste: Din (CSV)" },
-        { v: "landscape_vocabulary_big.csv", t: "Liste: Stor (valgfri)" },
+        { v:"landscape_vocabulary_notion.csv", t:"List: Your CSV" },
+        { v:"landscape_vocabulary_big.csv", t:"List: Big (optional)" },
       ];
       datasetEl.innerHTML="";
       for(const s of sets){
@@ -687,40 +590,42 @@
     }
 
     // Events
-    el("flip").onclick = () => { showAnswer = !showAnswer; render(); };
-    el("next").onclick = nextCard;
-    el("prev").onclick = prevCard;
-    el("shuffle").onclick = shuffleFiltered;
-    el("again").onclick = () => rate("again");
-    el("good").onclick  = () => rate("good");
-    el("easy").onclick  = () => rate("easy");
-    el("reset").onclick = resetProgress;
+    el("next").addEventListener("click", nextCard);
+    el("prev").addEventListener("click", prevCard);
+    el("shuffle").addEventListener("click", shuffleFiltered);
+    el("again").addEventListener("click", ()=>rate("again"));
+    el("good").addEventListener("click",  ()=>rate("good"));
+    el("easy").addEventListener("click",  ()=>rate("easy"));
+
+    toggleExampleBtn.addEventListener("click", ()=>{
+      exampleOpen = !exampleOpen;
+      exampleBlock.style.display = exampleOpen ? "block" : "none";
+      toggleExampleBtn.textContent = exampleOpen ? "↑ HIDE EXAMPLE SENTENCE" : "↓ SHOW EXAMPLE SENTENCE";
+    });
 
     searchEl.addEventListener("input", applyFilter);
     catEl.addEventListener("change", applyFilter);
-    modeEl.addEventListener("change", () => { showAnswer=false; render(); });
+    modeEl.addEventListener("change", ()=>{ showAnswer=false; render(); });
+    datasetEl.addEventListener("change", async ()=>{ CSV_FILE = datasetEl.value; await loadCSV(); });
 
-    datasetEl.addEventListener("change", async () => { CSV_FILE = datasetEl.value; await loadCSV(); });
-
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (e)=>{
       const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
-      const typing = (tag === "input" || tag === "textarea" || e.target.isContentEditable);
+      const typing = (tag==="input" || tag==="textarea" || e.target.isContentEditable);
       if(typing && e.key !== "Escape") return;
 
-      if(e.key === " "){ e.preventDefault(); showAnswer = !showAnswer; render(); }
-      if(e.key === "ArrowRight"){ e.preventDefault(); nextCard(); }
-      if(e.key === "ArrowLeft"){ e.preventDefault(); prevCard(); }
-      if(e.key === "1"){ e.preventDefault(); rate("again"); }
-      if(e.key === "2"){ e.preventDefault(); rate("good"); }
-      if(e.key === "3"){ e.preventDefault(); rate("easy"); }
-      if(e.key === "Escape" && typing){ e.target.blur(); }
+      if(e.key===" "){ e.preventDefault(); showAnswer = !showAnswer; render(); }
+      if(e.key==="ArrowRight"){ e.preventDefault(); nextCard(); }
+      if(e.key==="ArrowLeft"){ e.preventDefault(); prevCard(); }
+      if(e.key==="1"){ e.preventDefault(); rate("again"); }
+      if(e.key==="2"){ e.preventDefault(); rate("good"); }
+      if(e.key==="3"){ e.preventDefault(); rate("easy"); }
     });
 
     async function loadCSV(){
       setError("");
       try{
         const res = await fetch(CSV_FILE, { cache:"no-store" });
-        if(!res.ok) throw new Error(`Fant ikke ${CSV_FILE} (HTTP ${res.status}).`);
+        if(!res.ok) throw new Error(`Could not fetch ${CSV_FILE} (HTTP ${res.status}).`);
         const text = await res.text();
         const parsed = Papa.parse(text, { header:true, skipEmptyLines:true });
         const rows = parsed.data;
@@ -735,7 +640,7 @@
           ex: (r["Example sentence"] ?? "").toString().trim(),
         })).filter(c => c.en.length);
 
-        if(!cards.length) throw new Error("CSV lastet, men fant ingen rader.");
+        if(!cards.length) throw new Error("CSV loaded but no rows found. Check headers.");
 
         buildCategoryOptions();
         if(!modeEl.options.length) buildModeOptions();
