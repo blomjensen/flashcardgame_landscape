@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Landscape Flashcards</title>
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --panel:#121420;
+      --panel2:#0f111a;
+      --text:#e9ecf1;
+      --muted:#aab2c0;
+      --line:#2a2f3a;
+      --chip:#1b2030;
+      --good:#2ecc71;
+      --warn:#f1c40f;
+      --bad:#e74c3c;
+      --accent:#7aa2ff;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(122,162,255,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(46,204,113,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:1020px; margin:0 auto; padding:18px 14px 40px;}
+    header{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding:10px 4px 14px;
+    }
+    .title h1{margin:0; font-size:20px; letter-spacing:.2px}
+    .title .sub{margin-top:6px; color:var(--muted); font-size:13px}
+    .pillbar{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+      header{align-items:flex-start; flex-direction:column}
+      .pillbar{justify-content:flex-start}
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.09);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel .hd{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      background: rgba(0,0,0,.12);
+    }
+    .panel .hd strong{font-size:13px; letter-spacing:.2px}
+    .panel .bd{padding:14px}
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .input, select{
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      outline:none;
+      min-width: 220px;
+    }
+    select{min-width: 200px}
+    .btnrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    button{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+      font-weight:600;
+      font-size:13px;
+    }
+    button:hover{background: rgba(255,255,255,.06)}
+    button:active{transform: translateY(1px)}
+    button.primary{border-color: rgba(122,162,255,.55); background: rgba(122,162,255,.10)}
+    button.good{border-color: rgba(46,204,113,.55); background: rgba(46,204,113,.10)}
+    button.warn{border-color: rgba(241,196,15,.55); background: rgba(241,196,15,.10)}
+    button.bad{border-color: rgba(231,76,60,.55); background: rgba(231,76,60,.10)}
+    .card{
+      min-height: 360px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.11);
+      border-radius: 22px;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-120px -120px auto auto;
+      width:220px; height:220px;
+      background: radial-gradient(circle at center, rgba(122,162,255,.24), transparent 60%);
+      filter: blur(4px);
+      transform: rotate(25deg);
+      pointer-events:none;
+    }
+    .topmeta{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center}
+    .chip{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 10px; border-radius:999px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--muted); font-size:12px;
+    }
+    .term{
+      font-size:28px; font-weight:800; letter-spacing:.2px; line-height:1.1;
+      margin:4px 0 0;
+    }
+    .hint{color:var(--muted); font-size:13px; line-height:1.35}
+    .answer{
+      margin-top:8px;
+      padding-top:12px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      display:none;
+      gap:10px;
+    }
+    .answer.show{display:block}
+    .kv{
+      margin:8px 0;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.4;
+    }
+    .kv .k{color:var(--muted); font-size:12px; margin-bottom:4px}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .rating{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .small{font-size:12px; color:var(--muted)}
+    .list{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .stat{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .stat b{color:var(--text)}
+    .kbd{
+      padding:2px 7px; border-radius:8px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      font-size:12px; color:var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .err{
+      padding:12px 14px;
+      border-radius:14px;
+      background: rgba(231,76,60,.10);
+      border:1px solid rgba(231,76,60,.35);
+      color: var(--text);
+      font-size:13px;
+      line-height:1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Landscape Flashcards</h1>
+        <div class="sub">GitHub Pages + Notion embed. Data leses fra <span class="mono">landscape_vocabulary_notion.csv</span>.</div>
+      </div>
+      <div class="pillbar">
+        <div class="pill">Space = flip</div>
+        <div class="pill">←/→ = forrige/neste</div>
+        <div class="pill">1/2/3 = Again / Good / Easy</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN -->
+      <div class="panel">
+        <div class="hd">
+          <strong>Økt</strong>
+          <div class="controls">
+            <input id="search" class="input" placeholder="Søk (engelsk / norsk / definisjon)…" />
+            <select id="category"></select>
+          </div>
+        </div>
+        <div class="bd">
+          <div id="error" class="err" style="display:none;"></div>
+
+          <div class="card" id="card">
+            <div>
+              <div class="topmeta">
+                <div class="chip" id="metaLeft">Laster…</div>
+                <div class="chip" id="metaRight">—</div>
+              </div>
+
+              <div class="term" id="term">—</div>
+              <div class="hint" id="hint">Trykk <span class="kbd">Space</span> for å vise svar.</div>
+
+              <div class="answer" id="answer">
+                <div class="kv">
+                  <div class="k">Norsk</div>
+                  <div id="no">—</div>
+                </div>
+                <div class="kv">
+                  <div class="k">Uttale (IPA)</div>
+                  <div id="ipa" class="mono">—</div>
+                </div>
+                <div class="kv">
+                  <div class="k">Definisjon</div>
+                  <div id="def">—</div>
+                </div>
+                <div class="kv">
+                  <div class="k">Eksempel</div>
+                  <div id="ex">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+              <div class="btnrow">
+                <button id="flip" class="primary">Flip</button>
+                <button id="prev">← Forrige</button>
+                <button id="next">Neste →</button>
+                <button id="shuffle">Shuffle</button>
+              </div>
+
+              <div>
+                <div class="small" style="margin:0 0 6px;">Spaced repetition (Leitner-light)</div>
+                <div class="rating">
+                  <button id="again" class="bad">1 · Again</button>
+                  <button id="good" class="warn">2 · Good</button>
+                  <button id="easy" class="good">3 · Easy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="small" style="margin-top:10px;">
+            Tips: Hvis Notion viser tom embed, åpne URL-en i nettleser først og refresh embed i Notion.
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="panel">
+        <div class="hd">
+          <strong>Status</strong>
+          <div class="btnrow">
+            <button id="reset">Reset progresjon</button>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="list">
+            <div class="stat"><span>Totalt (filter)</span><b id="statTotal">—</b></div>
+            <div class="stat"><span>Due nå</span><b id="statDue">—</b></div>
+            <div class="stat"><span>Box 1–5</span><b id="statBoxes">—</b></div>
+            <div class="stat"><span>Økt: vurdert</span><b id="statRated">—</b></div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <div class="small" style="margin-bottom:6px;">Hvordan funker det?</div>
+            <div class="small" style="line-height:1.5;">
+              • Hvert kort har en “box” (1–5) lagret i <span class="mono">localStorage</span>.<br/>
+              • <span class="kbd">Again</span> → tilbake til box 1 (kortere delay).<br/>
+              • <span class="kbd">Good</span> → +1 box (lenger delay).<br/>
+              • <span class="kbd">Easy</span> → +2 box (enda lenger delay).<br/>
+              • “Due” velger kort som er klare nå (fallback: tilfeldig i filteret).
+            </div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <div class="small" style="margin-bottom:6px;">Filnavn (må ligge i repo root)</div>
+            <div class="chip mono">index.html</div>
+            <div class="chip mono" style="margin-top:8px;">landscape_vocabulary_notion.csv</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PapaParse for CSV -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    // --------- CONFIG ---------
+    const CSV_FILE = "landscape_vocabulary_notion.csv";
+    const LS_KEY = "landscape_flashcards_v1"; // change if you want a fresh store
+
+    // Leitner-ish scheduling (ms)
+    const DELAYS = {
+      again: 10 * 60 * 1000,          // 10 min
+      goodBase: 24 * 60 * 60 * 1000,  // 1 day
+      easyBase: 3 * 24 * 60 * 60 * 1000 // 3 days
+    };
+
+    // --------- STATE ---------
+    let cards = [];
+    let filtered = [];
+    let idx = 0;
+    let showAnswer = false;
+    let ratedThisSession = 0;
+
+    // progress store: { [id]: { box:1..5, due:number } }
+    function loadStore(){
+      try{ return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); }
+      catch(e){ return {}; }
+    }
+    function saveStore(store){
+      localStorage.setItem(LS_KEY, JSON.stringify(store));
+    }
+    function cardId(c){
+      // stable-ish id
+      return (c.en || "").trim().toLowerCase() + "||" + (c.no || "").trim().toLowerCase();
+    }
+    function ensureMeta(store, c){
+      const id = cardId(c);
+      if(!store[id]){
+        store[id] = { box: 1, due: 0 };
+      }
+      return store[id];
+    }
+
+    // --------- UI ELEMENTS ---------
+    const el = (id)=>document.getElementById(id);
+    const searchEl = el("search");
+    const catEl = el("category");
+    const errorEl = el("error");
+
+    const metaLeftEl = el("metaLeft");
+    const metaRightEl = el("metaRight");
+    const termEl = el("term");
+    const hintEl = el("hint");
+    const answerEl = el("answer");
+    const noEl = el("no");
+    const ipaEl = el("ipa");
+    const defEl = el("def");
+    const exEl = el("ex");
+
+    const statTotalEl = el("statTotal");
+    const statDueEl = el("statDue");
+    const statBoxesEl = el("statBoxes");
+    const statRatedEl = el("statRated");
+
+    // --------- HELPERS ---------
+    function now(){ return Date.now(); }
+
+    function setError(msg){
+      errorEl.style.display = msg ? "block" : "none";
+      errorEl.textContent = msg || "";
+    }
+
+    function normalize(s){
+      return (s ?? "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function currentCard(){
+      if(!filtered.length) return null;
+      return filtered[idx];
+    }
+
+    function computeStats(){
+      const store = loadStore();
+      let due = 0;
+      const boxCounts = [0,0,0,0,0];
+      for(const c of filtered){
+        const m = ensureMeta(store, c);
+        if((m.due || 0) <= now()) due++;
+        const b = Math.min(5, Math.max(1, m.box || 1));
+        boxCounts[b-1]++;
+      }
+      statTotalEl.textContent = filtered.length.toString();
+      statDueEl.textContent = due.toString();
+      statBoxesEl.textContent = boxCounts.join(" · ");
+      statRatedEl.textContent = ratedThisSession.toString();
+    }
+
+    function render(){
+      const c = currentCard();
+      if(!c){
+        termEl.textContent = "Ingen kort i filteret.";
+        metaLeftEl.textContent = "—";
+        metaRightEl.textContent = "—";
+        answerEl.classList.remove("show");
+        hintEl.textContent = "Prøv å tømme søk eller velg annen kategori.";
+        computeStats();
+        return;
+      }
+      const store = loadStore();
+      const m = ensureMeta(store, c);
+      saveStore(store);
+
+      metaLeftEl.textContent = c.category ? `Kategori: ${c.category}` : "Kategori: —";
+      metaRightEl.textContent = `Kort ${idx+1}/${filtered.length} · Box ${m.box}`;
+
+      termEl.textContent = c.en || "—";
+
+      noEl.textContent = c.no || "—";
+      ipaEl.textContent = c.ipa || "—";
+      defEl.textContent = c.def || "—";
+      exEl.textContent = c.ex || "—";
+
+      answerEl.classList.toggle("show", showAnswer);
+      hintEl.innerHTML = showAnswer
+        ? `Vurder kortet: <span class="kbd">1</span> Again · <span class="kbd">2</span> Good · <span class="kbd">3</span> Easy`
+        : `Trykk <span class="kbd">Space</span> for å vise svar.`;
+
+      computeStats();
+    }
+
+    function applyFilter(){
+      const q = normalize(searchEl.value);
+      const cat = catEl.value;
+
+      filtered = cards.filter(c => {
+        const catOk = (cat === "__ALL__") || (c.category === cat);
+        if(!catOk) return false;
+        if(!q) return true;
+        const hay = normalize([c.en,c.no,c.ipa,c.def,c.ex,c.category].join(" "));
+        return hay.includes(q);
+      });
+
+      // pick a due card if possible
+      idx = pickDueIndex() ?? 0;
+      showAnswer = false;
+      render();
+    }
+
+    function pickDueIndex(){
+      const store = loadStore();
+      const dueIdxs = [];
+      for(let i=0;i<filtered.length;i++){
+        const m = ensureMeta(store, filtered[i]);
+        if((m.due || 0) <= now()) dueIdxs.push(i);
+      }
+      if(!dueIdxs.length) return null;
+      return dueIdxs[Math.floor(Math.random()*dueIdxs.length)];
+    }
+
+    function nextCard(){
+      if(!filtered.length) return;
+      // prefer due
+      const duePick = pickDueIndex();
+      if(duePick !== null){
+        idx = duePick;
+      } else {
+        idx = (idx + 1) % filtered.length;
+      }
+      showAnswer = false;
+      render();
+    }
+
+    function prevCard(){
+      if(!filtered.length) return;
+      idx = (idx - 1 + filtered.length) % filtered.length;
+      showAnswer = false;
+      render();
+    }
+
+    function shuffleFiltered(){
+      for(let i=filtered.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+      }
+      idx = 0;
+      showAnswer = false;
+      render();
+    }
+
+    function rate(kind){
+      const c = currentCard();
+      if(!c) return;
+      const store = loadStore();
+      const id = cardId(c);
+      const m = ensureMeta(store, c);
+
+      if(kind === "again"){
+        m.box = 1;
+        m.due = now() + DELAYS.again;
+      } else if(kind === "good"){
+        m.box = Math.min(5, (m.box || 1) + 1);
+        m.due = now() + (DELAYS.goodBase * m.box);
+      } else if(kind === "easy"){
+        m.box = Math.min(5, (m.box || 1) + 2);
+        m.due = now() + (DELAYS.easyBase * m.box);
+      }
+      store[id] = m;
+      saveStore(store);
+      ratedThisSession++;
+      nextCard();
+    }
+
+    function resetProgress(){
+      if(!confirm("Reset progresjon for alle kort? Dette sletter localStorage for denne appen.")) return;
+      localStorage.removeItem(LS_KEY);
+      ratedThisSession = 0;
+      idx = 0;
+      showAnswer = false;
+      render();
+    }
+
+    function buildCategoryOptions(){
+      const cats = Array.from(new Set(cards.map(c => c.category).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+      catEl.innerHTML = "";
+      const optAll = document.createElement("option");
+      optAll.value="__ALL__"; optAll.textContent="Alle kategorier";
+      catEl.appendChild(optAll);
+      for(const c of cats){
+        const o=document.createElement("option");
+        o.value=c; o.textContent=c;
+        catEl.appendChild(o);
+      }
+    }
+
+    // --------- EVENTS ---------
+    el("flip").onclick = () => { showAnswer = !showAnswer; render(); };
+    el("next").onclick = nextCard;
+    el("prev").onclick = prevCard;
+    el("shuffle").onclick = shuffleFiltered;
+    el("again").onclick = () => rate("again");
+    el("good").onclick = () => rate("good");
+    el("easy").onclick = () => rate("easy");
+    el("reset").onclick = resetProgress;
+
+    searchEl.addEventListener("input", () => applyFilter());
+    catEl.addEventListener("change", () => applyFilter());
+
+    document.addEventListener("keydown", (e) => {
+      const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+      const typing = (tag === "input" || tag === "textarea" || e.target.isContentEditable);
+      if(typing && e.key !== "Escape") return;
+
+      if(e.key === " "){ e.preventDefault(); showAnswer = !showAnswer; render(); }
+      if(e.key === "ArrowRight"){ e.preventDefault(); nextCard(); }
+      if(e.key === "ArrowLeft"){ e.preventDefault(); prevCard(); }
+      if(e.key === "1"){ e.preventDefault(); rate("again"); }
+      if(e.key === "2"){ e.preventDefault(); rate("good"); }
+      if(e.key === "3"){ e.preventDefault(); rate("easy"); }
+      if(e.key === "Escape" && typing){ e.target.blur(); }
+    });
+
+    // --------- LOAD CSV ---------
+    async function loadCSV(){
+      setError("");
+      try{
+        const res = await fetch(CSV_FILE, { cache: "no-store" });
+        if(!res.ok){
+          throw new Error(`Fant ikke ${CSV_FILE}. (HTTP ${res.status}) Legg CSV i repo root og sjekk filnavnet.`);
+        }
+        const text = await res.text();
+        const parsed = Papa.parse(text, { header:true, skipEmptyLines:true });
+        if(parsed.errors && parsed.errors.length){
+          console.warn(parsed.errors);
+        }
+        const rows = parsed.data;
+
+        // Map your CSV headers to internal fields
+        cards = rows.map(r => ({
+          en: (r["Term (English)"] ?? "").toString().trim(),
+          no: (r["Norsk oversettelse"] ?? "").toString().trim(),
+          category: (r["Kategori"] ?? "").toString().trim(),
+          ipa: (r["Pronunciation (IPA)"] ?? "").toString().trim(),
+          def: (r["Definition (English)"] ?? "").toString().trim(),
+          ex: (r["Example sentence"] ?? "").toString().trim(),
+        })).filter(c => c.en.length);
+
+        if(!cards.length){
+          throw new Error("CSV lastet, men fant ingen rader. Sjekk at header-navnene matcher (Term (English), Norsk oversettelse, ...).");
+        }
+
+        buildCategoryOptions();
+        applyFilter();
+      } catch(err){
+        setError(String(err));
+        termEl.textContent = "Kunne ikke laste data.";
+        hintEl.textContent = "Sjekk at CSV ligger i samme mappe som index.html.";
+        computeStats();
+      }
+    }
+
+    loadCSV();
+  </script>
+</body>
+</html>
+
+
