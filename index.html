@@ -220,12 +220,19 @@
                 <div class="chip" id="metaLeft">Laster…</div>
                 <div class="chip" id="metaRight">—</div>
               </div>
+              <div class="small" style="margin-top:4px; color: var(--muted);" id="promptTitle">—</div>
 
               <div class="term" id="term">—</div>
+              <div class="hint" id="promptSub" style="margin-top:10px; display:none;"></div>
               <div class="hint" id="hint">Trykk <span class="kbd">Space</span> for å vise svar.</div>
 
               <div class="answer" id="answer">
+                
                 <div class="kv">
+                  <div class="k">English term</div>
+                  <div id="en">—</div>
+                </div>
+<div class="kv">
                   <div class="k">Norsk</div>
                   <div id="no">—</div>
                 </div>
@@ -368,6 +375,8 @@
     const answerEl = el("answer");
     const noEl = el("no");
     const ipaEl = el("ipa");
+    const enEl = el("en");
+    const noDefEl = el("nodef");
     const defEl = el("def");
     const exEl = el("ex");
 
@@ -427,9 +436,42 @@
       metaLeftEl.textContent = c.category ? `Kategori: ${c.category}` : "Kategori: —";
       metaRightEl.textContent = `Kort ${idx+1}/${filtered.length} · Box ${m.box}`;
 
-      termEl.textContent = c.en || "—";
+
+const mode = (modeEl && modeEl.value) ? modeEl.value : "def2term";
+
+// Front prompt (what you see before flip)
+if(mode === "def2term"){
+  promptTitleEl.textContent = "Definisjon";
+  termEl.textContent = c.def || "—";
+  if(c.nodef){
+    promptSubEl.style.display = "block";
+    promptSubEl.innerHTML = `<span style="color: var(--muted);">Norsk:</span> ${c.nodef}`;
+  } else {
+    promptSubEl.style.display = "none";
+    promptSubEl.textContent = "";
+  }
+} else if(mode === "term2def"){
+  promptTitleEl.textContent = "Begrep (English)";
+  termEl.textContent = c.en || "—";
+  promptSubEl.style.display = "none";
+  promptSubEl.textContent = "";
+} else if(mode === "no2en"){
+  promptTitleEl.textContent = "Norsk oversettelse";
+  termEl.textContent = c.no || "—";
+  promptSubEl.style.display = "none";
+  promptSubEl.textContent = "";
+} else {
+  promptTitleEl.textContent = "Prompt";
+  termEl.textContent = c.en || "—";
+  promptSubEl.style.display = "none";
+  promptSubEl.textContent = "";
+}
+
+
+      enEl.textContent = c.en || "—";
 
       noEl.textContent = c.no || "—";
+      noDefEl.textContent = c.nodef || "—";
       ipaEl.textContent = c.ipa || "—";
       defEl.textContent = c.def || "—";
       exEl.textContent = c.ex || "—";
@@ -639,6 +681,7 @@ document.addEventListener("keydown", (e) => {
 
         buildCategoryOptions();
         if(!modeEl.options.length) buildModeOptions();
+        if(!modeEl.value) modeEl.value = "def2term";
         if(!datasetEl.options.length) buildDatasetOptions();
         datasetEl.value = CSV_FILE;
         applyFilter();
