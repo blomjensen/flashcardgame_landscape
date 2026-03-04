@@ -85,17 +85,17 @@
     }
 
     header{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:18px;
+      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
       margin-bottom: 16px;
     }
     .brand h1{
       margin:0;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 650;
       letter-spacing: .2px;
     }
     .brand .sub{
-      margin-top:10px;
+      margin-top:8px;
       color: var(--muted2);
       font-size: 13px;
       line-height: 1.45;
@@ -380,7 +380,7 @@
     /* Hero block in answer (used to highlight either Definition or Term depending on mode) */
     #heroBlock{ margin-top: 22px; }
     #heroValue.termValue{
-      font-size: 24px;
+      font-size: 22px;
       line-height: 1.45;
       padding: 14px 16px;
       border-radius: 14px;
@@ -390,67 +390,47 @@
     }
 
   
-    /* Header layout */
-    header{ margin-bottom: 18px; }
+    /* Header alignment fix */
+    header{ align-items:flex-start; gap:20px; }
     .brand{ max-width: 520px; }
-    .topControls{ max-width: 560px; }
-
-    /* Theme switch (pill) */
-    .themeSwitch{ margin-top: 14px; display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
-    .switchBtn{
-      width: 170px; height: 46px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      position: relative;
-      cursor:pointer;
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 6px 12px 6px 6px;
-      color: rgba(243,246,248,.80);
-    }
-    html[data-theme="light"] .switchBtn{ border-color: rgba(30,35,39,.18); background: rgba(30,35,39,.04); color: rgba(30,35,39,.80); }
-    .switchKnob{
-      width: 36px; height: 36px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.16);
-      display:flex; align-items:center; justify-content:center;
-      transition: transform .2s ease;
-    }
-    html[data-theme="light"] .switchKnob{ background: rgba(30,35,39,.06); border-color: rgba(30,35,39,.16); }
-
-    .switchIcon{ font-size: 16px; line-height: 1; opacity: .95; }
-    .switchLabel{
-      font-size: 12px;
-      letter-spacing: .18em;
-      font-weight: 700;
-      opacity: .8;
-      margin-left: 10px;
-    }
-    .switchHint{
-      font-size: 12px;
-      color: var(--muted2);
-      opacity: .9;
-    }
-
-    /* Pill controls */
     .topControls{
-      display:flex;
-      gap: 10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+      display:grid;
+      grid-template-columns: 44px 1fr 1fr;
+      grid-auto-rows: 44px;
+      gap: 10px 12px;
       align-items:center;
+      justify-items:stretch;
+      min-width: 520px;
     }
+    .topControls .themeBtn{ justify-self:start; }
+    .topControls .input{ grid-column: 2 / 4; min-width: 0; }
+    #category{ grid-column: 2 / 3; min-width:0; }
+    #mode{ grid-column: 3 / 4; min-width:0; }
+    #dataset{ grid-column: 2 / 4; min-width:0; }
+
     .input, select{
-      min-width: 220px;
+      width: 100%;
+      min-width: 0;
+      height: 44px;
+      padding: 10px 12px;
       border-radius: 999px;
-      padding: 12px 14px;
+      color: var(--ink);
     }
-    select{ min-width: 210px; }
-    @media (max-width: 920px){
-      .brand{ max-width: 100%; }
-      .topControls{ justify-content:flex-start; max-width:100%; }
-      .input, select{ min-width: 180px; }
+    select option{
+      background: rgba(0,0,0,.85);
+      color: #fff;
+    }
+    html[data-theme="light"] select option{
+      background: #fff;
+      color: #111;
+    }
+
+    @media (max-width: 980px){
+      .topControls{ min-width: 0; width: 100%; grid-template-columns: 44px 1fr; }
+      .topControls .input{ grid-column: 1 / 3; }
+      #category{ grid-column: 1 / 3; }
+      #mode{ grid-column: 1 / 3; }
+      #dataset{ grid-column: 1 / 3; }
     }
 
   </style>
@@ -460,19 +440,10 @@
     <header>
       <div class="brand">
         <h1>Landscape Flashcards</h1>
-        <div class="sub">A calm, editorial vocabulary trainer for landscape architecture — learn terms with spaced repetition, decks and modes.
-        <div class="themeSwitch" aria-label="Theme">
-          <button class="switchBtn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
-            <span class="switchKnob" id="switchKnob">
-              <span class="switchIcon" id="themeGlyph">☾</span>
-            </span>
-            <span class="switchLabel" id="switchLabel">AUTO</span>
-          </button>
-          <span class="switchHint">Auto follows macOS/browser — click to override</span>
-        </div>
-
+        <div class="sub">Editorial flashcards for landscape architecture — decks, modes, and spaced repetition.</div>
       </div>
       <div class="topControls">
+        <button class="themeBtn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme"><span id="themeGlyph" style="font-size:18px;">☾</span></button>
         <input id="search" class="input" placeholder="Search (EN/NO/defs)..." />
         <select id="category"></select>
         <select id="mode"></select>
@@ -791,8 +762,8 @@
 
     function buildDatasetOptions(){
       const sets = [
-        { v:"landscape_vocabulary_notion.csv", t:"Deck: Your CSV" },
-        { v:"landscape_vocabulary_big.csv", t:"Deck: Big (optional)" },
+        { v:"landscape_vocabulary_notion.csv", t:"List: Your CSV" },
+        { v:"landscape_vocabulary_big.csv", t:"List: Big (optional)" },
       ];
       datasetEl.innerHTML="";
       for(const s of sets){
@@ -896,28 +867,10 @@
     function updateThemeGlyph(){
       const manual = localStorage.getItem(THEME_KEY) || "auto";
       const effective = getEffectiveScheme();
-
-      // icon shows what you'll switch TO
+      // glyph shows what you'll switch TO (sun when in dark, moon when in light)
       if(effective === "dark"){
         glyph.textContent = "☀";
       } else {
-        glyph.textContent = "☾";
-      }
-
-      // label shows current pref (AUTO/LIGHT/DARK)
-      const labelEl = document.getElementById("switchLabel");
-      if(labelEl){
-        labelEl.textContent = manual.toUpperCase();
-      }
-
-      // knob position: right when effective is dark, left when light (subtle)
-      const knob = document.getElementById("switchKnob");
-      if(knob){
-        knob.style.transform = (effective === "dark") ? "translateX(118px)" : "translateX(0px)";
-      }
-
-      themeBtn.title = manual === "auto" ? "Theme: Auto (OS)" : `Theme: ${manual}`;
-    } else {
         glyph.textContent = "☾";
       }
       // tooltip reflects state
