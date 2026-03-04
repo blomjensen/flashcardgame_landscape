@@ -190,7 +190,7 @@
     <header>
       <div class="title">
         <h1>Landscape Flashcards</h1>
-        <div class="sub">GitHub Pages + Notion embed. Data leses fra <span class="mono">landscape_vocabulary_notion.csv</span> (inkl. kolonnen <span class="mono">Norsk definisjon</span>).</div>
+        <div class="sub">GitHub Pages + Notion embed. Data leses fra valgt CSV i repo root. Stor liste (valgfri) kan legges inn som <span class="mono">landscape_vocabulary_big.csv</span>.</div>
       </div>
       <div class="pillbar">
         <div class="pill">Space = flip</div>
@@ -208,6 +208,7 @@
             <input id="search" class="input" placeholder="Søk (engelsk / norsk / definisjon)…" />
             <select id="category"></select>
             <select id="mode"></select>
+            <select id="dataset"></select>
           </div>
         </div>
         <div class="bd">
@@ -313,7 +314,7 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
     // --------- CONFIG ---------
-    const CSV_FILE = "landscape_vocabulary_notion.csv";
+    let CSV_FILE = "landscape_vocabulary_notion.csv";
     const LS_KEY = "landscape_flashcards_v1"; // change if you want a fresh store
 
     // Leitner-ish scheduling (ms)
@@ -355,6 +356,7 @@
     const searchEl = el("search");
     const catEl = el("category");
     const modeEl = el("mode");
+    const datasetEl = el("dataset");
     const errorEl = el("error");
 
     const metaLeftEl = el("metaLeft");
@@ -556,6 +558,22 @@
       modeEl.value = "def2term";
     }
 
+
+    function buildDatasetOptions(){
+      const sets = [
+        { v: "landscape_vocabulary_notion.csv", t: "Liste: Din (CSV i repo)"},
+        { v: "landscape_vocabulary_big.csv", t: "Liste: Stor (valgfri)"},
+      ];
+      datasetEl.innerHTML = "";
+      for(const s of sets){
+        const o = document.createElement("option");
+        o.value = s.v;
+        o.textContent = s.t;
+        datasetEl.appendChild(o);
+      }
+      datasetEl.value = CSV_FILE;
+    }
+
     // --------- EVENTS ---------
     el("flip").onclick = () => { showAnswer = !showAnswer; render(); };
     el("next").onclick = nextCard;
@@ -569,8 +587,12 @@
     searchEl.addEventListener("input", () => applyFilter());
     catEl.addEventListener("change", () => applyFilter());
     catEl.addEventListener("input", () => applyFilter());
+    catEl.addEventListener("pointerup", () => applyFilter());
     modeEl.addEventListener("change", () => { showAnswer = false; render(); });
+    modeEl.addEventListener("pointerup", () => { showAnswer = false; render(); });
     modeEl.addEventListener("input", () => { showAnswer = false; render(); });
+    datasetEl.addEventListener("change", async () => { CSV_FILE = datasetEl.value; await loadCSV(); });
+    datasetEl.addEventListener("input", async () => { CSV_FILE = datasetEl.value; await loadCSV(); });
 document.addEventListener("keydown", (e) => {
       const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
       const typing = (tag === "input" || tag === "textarea" || e.target.isContentEditable);
@@ -616,7 +638,9 @@ document.addEventListener("keydown", (e) => {
         }
 
         buildCategoryOptions();
-        buildModeOptions();
+        if(!modeEl.options.length) buildModeOptions();
+        if(!datasetEl.options.length) buildDatasetOptions();
+        datasetEl.value = CSV_FILE;
         applyFilter();
       } catch(err){
         setError(String(err));
