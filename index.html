@@ -295,7 +295,7 @@
               • <span class="kbd">Again</span> → tilbake til box 1 (kortere delay).<br/>
               • <span class="kbd">Good</span> → +1 box (lenger delay).<br/>
               • <span class="kbd">Easy</span> → +2 box (enda lenger delay).<br/>
-              • “Due” velger kort som er klare nå (fallback: tilfeldig i filteret).
+              • “Due nå” teller kort som er klare. Navigation går sekvensielt innen filteret.
             </div>
           </div>
 
@@ -452,8 +452,8 @@
         return hay.includes(q);
       });
 
-      // pick a due card if possible
-      idx = pickDueIndex() ?? 0;
+      // jump to first card in filter (more predictable)
+      idx = 0;
       showAnswer = false;
       render();
     }
@@ -471,13 +471,7 @@
 
     function nextCard(){
       if(!filtered.length) return;
-      // prefer due
-      const duePick = pickDueIndex();
-      if(duePick !== null){
-        idx = duePick;
-      } else {
-        idx = (idx + 1) % filtered.length;
-      }
+      idx = (idx + 1) % filtered.length;
       showAnswer = false;
       render();
     }
@@ -574,9 +568,10 @@
 
     searchEl.addEventListener("input", () => applyFilter());
     catEl.addEventListener("change", () => applyFilter());
+    catEl.addEventListener("input", () => applyFilter());
     modeEl.addEventListener("change", () => { showAnswer = false; render(); });
-
-    document.addEventListener("keydown", (e) => {
+    modeEl.addEventListener("input", () => { showAnswer = false; render(); });
+document.addEventListener("keydown", (e) => {
       const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
       const typing = (tag === "input" || tag === "textarea" || e.target.isContentEditable);
       if(typing && e.key !== "Escape") return;
