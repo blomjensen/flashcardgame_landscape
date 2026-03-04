@@ -85,17 +85,17 @@
     }
 
     header{
-      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:18px;
       margin-bottom: 16px;
     }
     .brand h1{
       margin:0;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 650;
       letter-spacing: .2px;
     }
     .brand .sub{
-      margin-top:8px;
+      margin-top:10px;
       color: var(--muted2);
       font-size: 13px;
       line-height: 1.45;
@@ -376,6 +376,83 @@
     .themeBtn:hover{ border-color: rgba(58,160,216,.30); }
     .themeIcon{ width: 20px; height: 20px; }
 
+  
+    /* Hero block in answer (used to highlight either Definition or Term depending on mode) */
+    #heroBlock{ margin-top: 22px; }
+    #heroValue.termValue{
+      font-size: 24px;
+      line-height: 1.45;
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: block;
+      max-width: 920px;
+      white-space: normal;
+    }
+
+  
+    /* Header layout */
+    header{ margin-bottom: 18px; }
+    .brand{ max-width: 520px; }
+    .topControls{ max-width: 560px; }
+
+    /* Theme switch (pill) */
+    .themeSwitch{ margin-top: 14px; display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+    .switchBtn{
+      width: 170px; height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      position: relative;
+      cursor:pointer;
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 6px 12px 6px 6px;
+      color: rgba(243,246,248,.80);
+    }
+    html[data-theme="light"] .switchBtn{ border-color: rgba(30,35,39,.18); background: rgba(30,35,39,.04); color: rgba(30,35,39,.80); }
+    .switchKnob{
+      width: 36px; height: 36px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.16);
+      display:flex; align-items:center; justify-content:center;
+      transition: transform .2s ease;
+    }
+    html[data-theme="light"] .switchKnob{ background: rgba(30,35,39,.06); border-color: rgba(30,35,39,.16); }
+
+    .switchIcon{ font-size: 16px; line-height: 1; opacity: .95; }
+    .switchLabel{
+      font-size: 12px;
+      letter-spacing: .18em;
+      font-weight: 700;
+      opacity: .8;
+      margin-left: 10px;
+    }
+    .switchHint{
+      font-size: 12px;
+      color: var(--muted2);
+      opacity: .9;
+    }
+
+    /* Pill controls */
+    .topControls{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .input, select{
+      min-width: 220px;
+      border-radius: 999px;
+      padding: 12px 14px;
+    }
+    select{ min-width: 210px; }
+    @media (max-width: 920px){
+      .brand{ max-width: 100%; }
+      .topControls{ justify-content:flex-start; max-width:100%; }
+      .input, select{ min-width: 180px; }
+    }
+
   </style>
 </head>
 <body>
@@ -383,10 +460,19 @@
     <header>
       <div class="brand">
         <h1>Landscape Flashcards</h1>
-        <div class="sub">Bornflight‑style cards + the exact flashcard logic we built (mode + dataset + spaced repetition).</div>
+        <div class="sub">A calm, editorial vocabulary trainer for landscape architecture — learn terms with spaced repetition, decks and modes.
+        <div class="themeSwitch" aria-label="Theme">
+          <button class="switchBtn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+            <span class="switchKnob" id="switchKnob">
+              <span class="switchIcon" id="themeGlyph">☾</span>
+            </span>
+            <span class="switchLabel" id="switchLabel">AUTO</span>
+          </button>
+          <span class="switchHint">Auto follows macOS/browser — click to override</span>
+        </div>
+
       </div>
       <div class="topControls">
-        <button class="themeBtn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme"><span id="themeGlyph" style="font-size:18px;">☾</span></button>
         <input id="search" class="input" placeholder="Search (EN/NO/defs)..." />
         <select id="category"></select>
         <select id="mode"></select>
@@ -413,10 +499,15 @@
           <div class="hint" id="hint">Press <span class="kbd">Space</span> to flip.</div>
 
           <div class="answer" id="answer">
-            <div class="kv"><div class="k">English term</div><div class="v termValue" id="ans_en">—</div></div>
+            
+            <div class="kv" id="heroBlock">
+              <div class="k" id="heroLabel">—</div>
+              <div class="v termValue" id="heroValue">—</div>
+            </div>
+<div class="kv" id="kv_en"><div class="k">English term</div><div class="v" id="ans_en">—</div></div>
             <div class="kv"><div class="k">Norsk oversettelse</div><div class="v noValue" id="ans_no">—</div></div>
             <div class="kv"><div class="k">Norsk definisjon</div><div class="v" id="ans_nodef">—</div></div>
-            <div class="kv"><div class="k">Definition (EN)</div><div class="v" id="ans_def">—</div></div>
+            <div class="kv" id="kv_def"><div class="k">Definition (EN)</div><div class="v" id="ans_def">—</div></div>
 
             <button class="btnWide" id="toggleExample">↓ SHOW EXAMPLE SENTENCE</button>
             <div class="kv" id="exampleBlock" style="display:none;">
@@ -488,6 +579,11 @@
     const exampleBlock = el("exampleBlock");
     const dotsEl = el("dots");
 
+    const heroLabelEl = el("heroLabel");
+    const heroValueEl = el("heroValue");
+    const kvEnEl = el("kv_en");
+    const kvDefEl = el("kv_def");
+
     function setError(msg){
       errorEl.style.display = msg ? "block" : "none";
       errorEl.textContent = msg || "";
@@ -535,12 +631,30 @@
     function renderPromptByMode(c){
       const mode = modeEl.value || "term2def";
 
-      // Answer (always prepared)
+      // Answer (prepared, but layout depends on mode)
       ansEnEl.textContent = c.en || "—";
       ansNoEl.textContent = c.no || "—";
       ansNoDefEl.textContent = c.nodef || "—";
       ansDefEl.textContent = c.def || "—";
       ansExEl.textContent = c.ex || "—";
+
+      // Hero block + visibility rules per mode
+      // term2def: hero shows Definition (EN), hide English term + hide Definition block (avoid duplicate)
+      // def2term: hero shows English term, keep Definition block visible
+      // no2en: hero shows English term (answer), keep Definition block visible
+      if(mode === "term2def"){
+        heroLabelEl.textContent = "DEFINITION (EN)";
+        heroValueEl.textContent = c.def || "—";
+        heroValueEl.classList.add("termValue");
+        if(kvEnEl) kvEnEl.style.display = "none";
+        if(kvDefEl) kvDefEl.style.display = "none";
+      } else {
+        heroLabelEl.textContent = "ENGLISH TERM";
+        heroValueEl.textContent = c.en || "—";
+        heroValueEl.classList.add("termValue");
+        if(kvEnEl) kvEnEl.style.display = "none"; // redundant in these modes too
+        if(kvDefEl) kvDefEl.style.display = "block";
+      }
 
       // Reset example section
       exampleOpen = false;
@@ -677,8 +791,8 @@
 
     function buildDatasetOptions(){
       const sets = [
-        { v:"landscape_vocabulary_notion.csv", t:"List: Your CSV" },
-        { v:"landscape_vocabulary_big.csv", t:"List: Big (optional)" },
+        { v:"landscape_vocabulary_notion.csv", t:"Deck: Your CSV" },
+        { v:"landscape_vocabulary_big.csv", t:"Deck: Big (optional)" },
       ];
       datasetEl.innerHTML="";
       for(const s of sets){
@@ -782,10 +896,28 @@
     function updateThemeGlyph(){
       const manual = localStorage.getItem(THEME_KEY) || "auto";
       const effective = getEffectiveScheme();
-      // glyph shows what you'll switch TO (sun when in dark, moon when in light)
+
+      // icon shows what you'll switch TO
       if(effective === "dark"){
         glyph.textContent = "☀";
       } else {
+        glyph.textContent = "☾";
+      }
+
+      // label shows current pref (AUTO/LIGHT/DARK)
+      const labelEl = document.getElementById("switchLabel");
+      if(labelEl){
+        labelEl.textContent = manual.toUpperCase();
+      }
+
+      // knob position: right when effective is dark, left when light (subtle)
+      const knob = document.getElementById("switchKnob");
+      if(knob){
+        knob.style.transform = (effective === "dark") ? "translateX(118px)" : "translateX(0px)";
+      }
+
+      themeBtn.title = manual === "auto" ? "Theme: Auto (OS)" : `Theme: ${manual}`;
+    } else {
         glyph.textContent = "☾";
       }
       // tooltip reflects state
