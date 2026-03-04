@@ -5,29 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Landscape Flashcards</title>
   <style>
+
+    /* Theme system:
+       - Default follows OS via prefers-color-scheme
+       - Manual override via html[data-theme="light|dark"] (set by button) */
     :root{
-      /* Bornflight-ish dark editorial */
+      /* default = light (editorial warm) */
+      --bg:#f2eee8;
+      --frame:#f7f3ee;
+      --card:#ffffff;
+      --card2:#fbf7f2;
+      --ink:#1e2327;
+      --muted: rgba(30,35,39,.70);
+      --muted2: rgba(30,35,39,.55);
+      --line: rgba(30,35,39,.12);
+      --accent:#3aa0d8;          /* cyan label */
+      --accent2:#2b88be;
+      --shadow: 0 18px 60px rgba(20, 18, 16, .14);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg:#070b0f;
+        --frame:#0b1016;
+        --card:#132a36;
+        --card2:#0f2330;
+        --ink:#f3f6f8;
+        --muted: rgba(243,246,248,.72);
+        --muted2: rgba(243,246,248,.55);
+        --line: rgba(243,246,248,.10);
+        --accent:#90d3ff;
+        --accent2:#6bbfe8;
+        --shadow: 0 24px 80px rgba(0,0,0,.55);
+      }
+    }
+
+    html[data-theme="light"]{
+      --bg:#f2eee8;
+      --frame:#f7f3ee;
+      --card:#ffffff;
+      --card2:#fbf7f2;
+      --ink:#1e2327;
+      --muted: rgba(30,35,39,.70);
+      --muted2: rgba(30,35,39,.55);
+      --line: rgba(30,35,39,.12);
+      --accent:#3aa0d8;
+      --accent2:#2b88be;
+      --shadow: 0 18px 60px rgba(20, 18, 16, .14);
+    }
+    html[data-theme="dark"]{
       --bg:#070b0f;
       --frame:#0b1016;
-      --card:#132a36;            /* deep blue-green */
+      --card:#132a36;
       --card2:#0f2330;
       --ink:#f3f6f8;
       --muted: rgba(243,246,248,.72);
       --muted2: rgba(243,246,248,.55);
       --line: rgba(243,246,248,.10);
-      --accent:#90d3ff;          /* cyan label */
+      --accent:#90d3ff;
       --accent2:#6bbfe8;
       --shadow: 0 24px 80px rgba(0,0,0,.55);
-      --radius: 18px;
-      --radius2: 12px;
     }
 
-    *{box-sizing:border-box}
+
+        *{box-sizing:border-box}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: radial-gradient(1200px 900px at 20% 10%, rgba(144,211,255,.08), transparent 55%),
-                  radial-gradient(900px 700px at 90% 20%, rgba(144,211,255,.05), transparent 60%),
+      background: radial-gradient(1200px 900px at 20% 10%, rgba(58,160,216,.10), transparent 55%),
+                  radial-gradient(900px 700px at 90% 20%, rgba(58,160,216,.06), transparent 60%),
                   var(--bg);
       color: var(--ink);
     }
@@ -71,7 +117,7 @@
     .input::placeholder{ color: rgba(243,246,248,.45); }
 
     .frame{
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.00)), var(--frame);
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 22px;
       box-shadow: var(--shadow);
@@ -79,14 +125,14 @@
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.00)), var(--frame);
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 18px;
       overflow:hidden;
     }
 
     .cardInner{
-      background: linear-gradient(180deg, rgba(19,42,54,.96), rgba(15,35,48,.96));
+      background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.02)), var(--card);
       border-radius: 18px;
       padding: 26px 26px 22px;
       min-height: 420px;
@@ -117,10 +163,10 @@
 
     .title{
       font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
-      font-weight: 700;
+      font-weight: 750;
       letter-spacing: -.02em;
-      line-height: 1.02;
-      font-size: 58px;
+      line-height: 1.04;
+      font-size: 52px;
       margin: 8px 0 8px;
       word-break: break-word;
     }
@@ -277,6 +323,59 @@
       font-size: 12px;
       text-align:center;
     }
+  
+    /* Answer readability */
+    .answer{
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .kv{ margin: 16px 0; max-width: 860px; }
+    .k{ font-size: 11px; letter-spacing: .18em; }
+    .v{ font-size: 16px; line-height: 1.65; color: rgba(243,246,248,.92); }
+    /* in light theme the text variable changes; use --ink */
+    .v{ color: var(--ink); opacity: .96; }
+
+    .termValue{
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-size: 32px;
+      line-height: 1.08;
+      font-weight: 750;
+      letter-spacing: -.01em;
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(58,160,216,.12);
+      border: 1px solid rgba(58,160,216,.28);
+    }
+
+    .noValue{
+      font-style: italic;
+      font-size: 18px;
+      opacity: .92;
+    }
+
+    /* Keep quote readable */
+    .quote{ font-size: 18px; line-height: 1.55; max-width: 860px; }
+
+    /* Make buttons less "gamey" */
+    .srBtn{ min-width: 120px; padding: 11px 14px; }
+    .navBtn{ width: 58px; height: 46px; }
+
+    /* Theme toggle button */
+    .themeBtn{
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      color: var(--ink);
+      opacity: .9;
+    }
+    .themeBtn:hover{ border-color: rgba(58,160,216,.30); }
+    .themeIcon{ width: 20px; height: 20px; }
+
   </style>
 </head>
 <body>
@@ -287,6 +386,7 @@
         <div class="sub">Bornflight‑style cards + the exact flashcard logic we built (mode + dataset + spaced repetition).</div>
       </div>
       <div class="topControls">
+        <button class="themeBtn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme"><span id="themeGlyph" style="font-size:18px;">☾</span></button>
         <input id="search" class="input" placeholder="Search (EN/NO/defs)..." />
         <select id="category"></select>
         <select id="mode"></select>
@@ -313,8 +413,8 @@
           <div class="hint" id="hint">Press <span class="kbd">Space</span> to flip.</div>
 
           <div class="answer" id="answer">
-            <div class="kv"><div class="k">English term</div><div class="v" id="ans_en">—</div></div>
-            <div class="kv"><div class="k">Norsk oversettelse</div><div class="v" id="ans_no">—</div></div>
+            <div class="kv"><div class="k">English term</div><div class="v termValue" id="ans_en">—</div></div>
+            <div class="kv"><div class="k">Norsk oversettelse</div><div class="v noValue" id="ans_no">—</div></div>
             <div class="kv"><div class="k">Norsk definisjon</div><div class="v" id="ans_nodef">—</div></div>
             <div class="kv"><div class="k">Definition (EN)</div><div class="v" id="ans_def">—</div></div>
 
@@ -460,7 +560,7 @@
         promptMainEl.textContent = c.en || "—";
         if(c.ipa){ ipaLineEl.style.display="block"; ipaLineEl.textContent = c.ipa; }
         if(c.no){ noLineEl.style.display="block"; noLineEl.textContent = c.no; }
-        if(c.def){ quoteLineEl.style.display="block"; quoteLineEl.textContent = c.def; }
+        /* definition hidden until flip */
       } else if(mode === "no2en"){
         promptMainEl.textContent = c.no || "—";
         if(c.en){ quoteLineEl.style.display="block"; quoteLineEl.textContent = c.en; }
@@ -572,7 +672,7 @@
         o.value=m.v; o.textContent=m.t;
         modeEl.appendChild(o);
       }
-      modeEl.value="term2def"; // best match to the style you like
+      modeEl.value="term2def"; // default
     }
 
     function buildDatasetOptions(){
@@ -654,6 +754,61 @@
         render();
       }
     }
+
+    
+    // Theme toggle (starts in OS/browser default; overrides only after user clicks)
+    const THEME_KEY = "lv_theme_pref_v1"; // "auto" | "dark" | "light"
+    const themeBtn = document.getElementById("themeBtn");
+    const glyph = document.getElementById("themeGlyph");
+
+    function setTheme(pref){
+      if(!pref || pref === "auto"){
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem(THEME_KEY, "auto");
+      } else {
+        document.documentElement.setAttribute("data-theme", pref);
+        localStorage.setItem(THEME_KEY, pref);
+      }
+      updateThemeGlyph();
+    }
+
+    function getEffectiveScheme(){
+      // returns "dark" or "light" based on current effective style
+      const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const manual = document.documentElement.getAttribute("data-theme");
+      return manual || (isDark ? "dark" : "light");
+    }
+
+    function updateThemeGlyph(){
+      const manual = localStorage.getItem(THEME_KEY) || "auto";
+      const effective = getEffectiveScheme();
+      // glyph shows what you'll switch TO (sun when in dark, moon when in light)
+      if(effective === "dark"){
+        glyph.textContent = "☀";
+      } else {
+        glyph.textContent = "☾";
+      }
+      // tooltip reflects state
+      themeBtn.title = manual === "auto" ? "Theme: Auto (OS)" : `Theme: ${manual}`;
+    }
+
+    // init from storage
+    setTheme(localStorage.getItem(THEME_KEY) || "auto");
+
+    themeBtn.addEventListener("click", ()=>{
+      const current = localStorage.getItem(THEME_KEY) || "auto";
+      const next = current === "auto" ? "dark" : (current === "dark" ? "light" : "auto");
+      setTheme(next);
+    });
+
+    // keep glyph in sync if OS theme changes while in auto
+    if(window.matchMedia){
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ()=>{
+        const pref = localStorage.getItem(THEME_KEY) || "auto";
+        if(pref === "auto") updateThemeGlyph();
+      });
+    }
+
 
     // init
     buildModeOptions();
